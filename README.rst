@@ -6,6 +6,8 @@ http://logstash.net/
 
 Changelog
 =========
+0.4.8
+  - Added HTTP handler
 0.4.7
   - Add couple of sensitive fields to the skip_list
 0.4.6
@@ -44,7 +46,7 @@ Using pip::
 Usage
 =====
 
-``LogstashHandler`` is a custom logging handler which sends Logstash messages using UDP.
+``LogstashHandler`` is a custom logging handler which sends Logstash messages using UDP, TCP or HTTP.
 
 For example::
 
@@ -58,6 +60,7 @@ For example::
   test_logger.setLevel(logging.INFO)
   test_logger.addHandler(logstash.LogstashHandler(host, 5959, version=1))
   # test_logger.addHandler(logstash.TCPLogstashHandler(host, 5959, version=1))
+  # test_logger.addHandler(logstash.HTTPLogstashHandler(host, 5959, url='/', version=1))
 
   test_logger.error('python-logstash: test logstash error message.')
   test_logger.info('python-logstash: test logstash info message.')
@@ -97,6 +100,23 @@ For example::
       test_logger.exception('python-logstash-logger: Exception with stack trace!')
 
 
+
+If you wish to use the HTTP handler and pass credentials, it is recommended to set secure to true to use a HTTPS connection.
+Otherwise your login and password will be passed in cleartext.
+
+For example::
+
+    import logging
+    import logstash
+    import sys
+
+    host = 'localhost'
+
+    test_logger = logging.getLogger('python-logstash-logger')
+    test_logger.setLevel(logging.INFO)
+    test_logger.addHandler(
+        logstash.HTTPLogstashHandler(host, 5959, url='/', credentials=('login', 'password'), version=1, secure=True)
+        )
 
 Using with Django
 =================
@@ -145,3 +165,4 @@ Example Logstash Configuration (``logstash.conf``) for Receiving Events from pyt
   }
 
 For TCP input you need to change the logstash's input to ``tcp`` and modify django log handler's class to ``logstash.TCPLogstashHandler``
+For HTTP input you need to change the logstash's input to ``http`` and modify django log handler's class to ``logstash.HTTPLogstashHandler``
