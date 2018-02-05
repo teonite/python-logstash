@@ -46,7 +46,7 @@ Using pip::
 Usage
 =====
 
-``LogstashHandler`` is a custom logging handler which sends Logstash messages using UDP, TCP or HTTP.
+``LogstashHandler`` is a custom logging handler which sends Logstash messages using UDP.
 
 For example::
 
@@ -99,10 +99,8 @@ For example::
   except:
       test_logger.exception('python-logstash-logger: Exception with stack trace!')
 
-
-
-If you wish to use the HTTP handler and pass credentials, it is recommended to set secure to true to use a HTTPS connection.
-Otherwise your login and password will be passed in cleartext.
+If your Logstash is secured and requires authorization, you can use HTTP handler to your pass credentials.
+It is recommended to set secure to true to use a HTTPS connection. Otherwise your login and password will be passed in cleartext.
 
 For example::
 
@@ -165,4 +163,4 @@ Example Logstash Configuration (``logstash.conf``) for Receiving Events from pyt
   }
 
 For TCP input you need to change the logstash's input to ``tcp`` and modify django log handler's class to ``logstash.TCPLogstashHandler``
-For HTTP input you need to change the logstash's input to ``http`` and modify django log handler's class to ``logstash.HTTPLogstashHandler``
+For HTTP input you need to change the logstash's input to ``http``.
